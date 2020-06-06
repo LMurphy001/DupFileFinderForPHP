@@ -6,9 +6,18 @@
 <strong>IMPORTANT:</strong> Read the bottom of this document for <a href="#bottomMatter">Usage, Examples, License and Source Code</a> information<br />
 
 <?php
-do_it();
+if ($argc == 2)
+    $qrystr = $argv[1];
+else if ($argc > 1 and $argc !== 2)
+    die("Expecting 1 argment passed to $argv[0] not $argc");
+else
+    $qrystr = $_SERVER['QUERY_STRING'];
+if (strlen($qrystr) <= 0)
+    die("Expecting an input query string");
 
-function do_it()
+do_it($qrystr);
+
+function do_it($qrystr)
 {
 date_default_timezone_set('America/New_York');
 $EXCLUDEFOLDERS = array();
@@ -19,7 +28,7 @@ $LIMITEXTENSIONS = false;
 $SIZES = array();
 $HASHES = array();
 
-getQueryStringOptions($EXCLUDEFOLDERS, $FOLDERS, $EXCLUDEEXTENSIONS, $EXTENSIONS, $LIMITEXTENSIONS);
+getQueryStringOptions($qrystr, $EXCLUDEFOLDERS, $FOLDERS, $EXCLUDEEXTENSIONS, $EXTENSIONS, $LIMITEXTENSIONS);
 
 if (count ($FOLDERS) > 0) {
 	echo "Starting at " . date('Y-m-d H:i:s T', time()) . "<br /><br />\n";
@@ -115,10 +124,13 @@ class IgnorantRecursiveDirectoryIterator extends RecursiveDirectoryIterator { //
 	}
 }
 
-function getQueryStringOptions(&$EXCLUDEFOLDERS, &$FOLDERS, &$EXCLUDEEXTENSIONS, &$EXTENSIONS, &$LIMITEXTENSIONS ) {
-	$qrystr = $_SERVER['QUERY_STRING'];
+function getQueryStringOptions($qrystr, &$EXCLUDEFOLDERS, &$FOLDERS, &$EXCLUDEEXTENSIONS, &$EXTENSIONS, &$LIMITEXTENSIONS ) {
+	//$qrystr = $_SERVER['QUERY_STRING'];
 	if (strlen($qrystr) > 0)
 		echo "Query String: $qrystr<br />\n";
+	if (false === stripos($qrystr, "folders") {
+		echo "\nPlease specify folders to search\n";
+	}
 	parse_str($qrystr, $qrypairs );
 	
 	if (isset($qrypairs["excludeFolders"])) {
