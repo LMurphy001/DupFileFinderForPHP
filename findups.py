@@ -43,6 +43,7 @@ if __name__ == '__main__':
                 print('%s is not a valid path, please verify' % i)
                 sys.exit()
 
+        num_dups = 0
         for size, hashes in odict.items():
             for hsh, files in hashes.items():
                 if len(files) > 1: # More than one file with the same size and same hash = duplicated file
@@ -55,9 +56,15 @@ if __name__ == '__main__':
                     sorted_list.sort()
                     for i in range(len(sorted_list)):
                         s = sorted_list[i].split('_@#@_')
-                        # only print the files after the first one. Those are the ones to be deleted.
-                        #if i > 0:
-                        #    print(s[1])
-                        print(i+1, s[1])
+                        fn = s[1]
+                        if 0 == fn.find(".\\"):
+                            fn = fn[2:]
+                        if num_dups == 0:
+                            print("Duplicates:")
+                        if i == 0:
+                            num_dups += 1
+                            print()
+                            print(num_dups)
+                        print(fn)
     else:
         print('Usage: python findups.py folder1 folder2 folder3')
